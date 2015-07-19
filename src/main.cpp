@@ -1,8 +1,10 @@
 #include <iostream>
 #include "engine.h"
 #include "Api.h"
+#include "selene.h"
 
 using namespace std;
+using namespace sel;
 
 void init_engine();
 void shutdown_engine();
@@ -10,33 +12,24 @@ void handle_input();
 void update_screen();
 void draw_screen();
 void init_objects();
+void init_script();
+
+State state{true};
 
 int main() {
 
-
-
-
     init_engine();
-    lua_State * l = luaL_newstate();
-    luaL_openlibs(l);
-    RegisterEntity(l);
-    int erred = luaL_dofile(l, "/home/ronald/ClionProjects/engine/scripts/test.lua");
-    if(erred) {
-        std::cout << "Lua error: " << luaL_checkstring(l, -1) << std::endl;
-    }
-
-
+    init_script();
     init_objects();
 
     do {
-
         handle_input();
         draw_screen();
 
     } while (!game_end);
 
     shutdown_engine();
-    lua_close(l);
+
     return 0;
 }
 
@@ -82,10 +75,22 @@ void update_screen(){
 
 void init_objects(){
 
-    Entity *npc = new Entity(load_bitmap("/home/ronald/ClionProjects/luallegro/000.bmp", NULL),0,0);
+    for(int i=1; i<=int(state["ENTIDAD_COUNT"]); i++) {
+        std:string bmp = state["Entidades"][i]["img"];
+        int x = state["Entidades"][i]["x"];
+        int y = state["Entidades"][i]["y"];
+        objects_list.push_front(new Entity(load_bitmap(bmp.c_str(), NULL), x, y));
+    }
+    /*Entity *npc = new Entity(load_bitmap("/home/ronald/ClionProjects/luallegro/000.bmp", NULL),0,0);
     Entity *npc2 = new Entity(load_bitmap("/home/ronald/ClionProjects/luallegro/000.bmp", NULL),200,50);
 
     objects_list.push_front(npc);
-    objects_list.push_front(npc2);
+    objects_list.push_front(npc2);*/
 
+}
+
+void init_script(){
+    state["cmultiply"] = std::function<int(int, int)>(my_multiply);
+    state.Load("/home/ronald/ClionProjects/engine/scripts/test.lua");
+    state["init"]();
 }
