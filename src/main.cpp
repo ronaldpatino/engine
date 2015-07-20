@@ -75,22 +75,25 @@ void update_screen(){
 
 void init_objects(){
 
-    for(int i=1; i<=int(state["ENTIDAD_COUNT"]); i++) {
-        std:string bmp = state["Entidades"][i]["img"];
-        int x = state["Entidades"][i]["x"];
-        int y = state["Entidades"][i]["y"];
+
+    for (int i=0; i<=int(state["Entities"]["size"]); i++ ){
+
+        string nombre = state["Entities"][i]["nombre"];
+        string script = state["Entities"][i]["script"];
+        state.Load(script);
+        state["init"]();
+        string bmp = state["Entity"]["img"];
+        int x = state["Entity"]["x"];
+        int y = state["Entity"]["y"];
+
         objects_list.push_front(new Entity(load_bitmap(bmp.c_str(), NULL), x, y));
     }
-    /*Entity *npc = new Entity(load_bitmap("/home/ronald/ClionProjects/luallegro/000.bmp", NULL),0,0);
-    Entity *npc2 = new Entity(load_bitmap("/home/ronald/ClionProjects/luallegro/000.bmp", NULL),200,50);
-
-    objects_list.push_front(npc);
-    objects_list.push_front(npc2);*/
 
 }
 
 void init_script(){
-    state["cmultiply"] = std::function<int(int, int)>(my_multiply);
-    state.Load("/home/ronald/ClionProjects/engine/scripts/test.lua");
+    state["lmultiply"] = std::function<int(int, int)>(my_multiply);
+    state["lsay"] = std::function<int(std::string)>(say);
+    state.Load("/home/ronald/ClionProjects/engine/scripts/entities.lua");
     state["init"]();
 }

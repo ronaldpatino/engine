@@ -18,7 +18,7 @@ public:
 
     char *imagen;
     BITMAP *bitmap;
-    int x,
+    int     x,
             y,
             mx,
             my,
@@ -26,11 +26,9 @@ public:
 
     char script[256];
     char name[256];
-    int health,
+    int     health,
             max_health;
 
-
-    void say(const char *text);
 
     ~Entity() { }
 

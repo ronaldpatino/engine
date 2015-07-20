@@ -5,6 +5,9 @@
 #include <iostream>
 #include "Entity.h"
 
+
+
+
 Entity::Entity(char *imagen, int x, int y, char *script, char *name) {
 
     this->bitmap = load_bitmap(imagen, NULL);
@@ -12,10 +15,5 @@ Entity::Entity(char *imagen, int x, int y, char *script, char *name) {
     this->y = y;
     strcpy(this->script, script);
     strcpy(this->name, name);
-}
-
-
-void Entity::say(const char *text) {
-    std::cout << text << std::endl;
 }
 
