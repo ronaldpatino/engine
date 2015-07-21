@@ -7,28 +7,34 @@
 
 #include <allegro.h>
 #include <string>
+#include <vector>
 
 class Entity {
 
 public:
     Entity(BITMAP *bitmap, int x, int y) : bitmap(bitmap), x(x), y(y) { }
 
+    Entity(const char *imagen, int x, int y, const char *script, const char *name, int frames, int width, int height);
 
-    Entity(char *imagen, int x, int y, char *script, char *name) ;
+    BITMAP * getFrame();
 
     char *imagen;
     BITMAP *bitmap;
+    std::vector<BITMAP *>anim;
     int     x,
             y,
             mx,
             my,
-            dir;
+            dir,
+            width,
+            height,
+            curframe,
+            frames;
 
     char script[256];
     char name[256];
     int     health,
             max_health;
-
 
     ~Entity() { }
 

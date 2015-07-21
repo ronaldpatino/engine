@@ -61,8 +61,9 @@ void handle_input(){
 
 void draw_screen(){
 
+    clear(buffer);
     for(itr = objects_list.begin(); itr != objects_list.end(); itr++){
-        draw_sprite(buffer, (*itr)->bitmap, (*itr)->x, (*itr)->y);
+        draw_sprite(buffer, (*itr)->getFrame(), (*itr)->x, (*itr)->y);
     }
 
 
@@ -85,8 +86,14 @@ void init_objects(){
         string bmp = state["Entity"]["img"];
         int x = state["Entity"]["x"];
         int y = state["Entity"]["y"];
+        int frames = state["Entity"]["frames"];
+        int width = state["Entity"]["width"];
+        int height = state["Entity"]["height"];
 
-        objects_list.push_front(new Entity(load_bitmap(bmp.c_str(), NULL), x, y));
+        //objects_list.push_front(new Entity(load_bitmap(bmp.c_str(), NULL), x, y));
+
+        objects_list.push_front(new Entity(bmp.c_str(), x, y, script.c_str(), nombre.c_str(),frames, width,height));
+
     }
 
 }
