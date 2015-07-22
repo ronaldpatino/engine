@@ -1,20 +1,12 @@
 #include <iostream>
 #include "engine.h"
 #include "Api.h"
-#include "selene.h"
 
-using namespace std;
-using namespace sel;
-
-void init_engine();
-void shutdown_engine();
-void handle_input();
-void update_screen();
-void draw_screen();
-void init_objects();
-void init_script();
-
-State state{true};
+void ticker(){
+    cout << ticks << endl;
+    ticks++;
+}
+END_OF_FUNCTION(ticker)
 
 int main() {
 
@@ -22,28 +14,41 @@ int main() {
     init_script();
     init_objects();
 
-    do {
+    while (!game_end) {
+
         handle_input();
         draw_screen();
 
-    } while (!game_end);
+    }
 
     shutdown_engine();
 
     return 0;
 }
+END_OF_MAIN() // This must be called right after the closing bracket of your MAIN function.
+
+
 
 
 void init_engine(){
 
     allegro_init();
     install_keyboard();
+    install_timer();
+
+
+    LOCK_VARIABLE(ticks);
+    LOCK_FUNCTION(ticker);
+    install_int_ex(ticker, BPS_TO_TIMER(updates_per_second));
+
     set_color_depth(16);
     set_gfx_mode(GFX_AUTODETECT_WINDOWED, 800, 600, 0, 0);
+
 
     if (!(buffer = create_bitmap(SCREEN_W, SCREEN_H))) exit(1);
     clear_bitmap(buffer);
     clear(screen);
+
 
 }
 
@@ -53,6 +58,7 @@ void shutdown_engine(){
         delete *itr;
     }
     objects_list.clear();
+    remove_int(ticker);
 }
 
 void handle_input(){
@@ -65,8 +71,6 @@ void draw_screen(){
     for(itr = objects_list.begin(); itr != objects_list.end(); itr++){
         draw_sprite(buffer, (*itr)->getFrame(), (*itr)->x, (*itr)->y);
     }
-
-
     update_screen();
 }
 
@@ -75,7 +79,6 @@ void update_screen(){
 }
 
 void init_objects(){
-
 
     for (int i=0; i<=int(state["Entities"]["size"]); i++ ){
 

@@ -29,7 +29,8 @@ public:
             width,
             height,
             curframe,
-            frames;
+            frames,
+            frame_delay;
 
     char script[256];
     char name[256];

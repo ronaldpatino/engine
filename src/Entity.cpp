@@ -14,6 +14,7 @@ Entity::Entity(const char *imagen, int x, int y, const char *script, const char 
     strcpy(this->script, script);
     strcpy(this->name, name);
     this->frames = frames;
+    this->frame_delay = 60;
 
     for (int f=0; f<= this->frames; f++){
         this->anim.push_back(create_sub_bitmap(this->bitmap, f * this->width, 0, this->width, this->height));
@@ -22,7 +23,15 @@ Entity::Entity(const char *imagen, int x, int y, const char *script, const char 
 }
 
 BITMAP * Entity::getFrame(){
-    this->curframe = (this->curframe +1 ) % this->frames;
+
+    if(this->frame_delay <= 0){
+        this->curframe = (this->curframe +1 ) % this->frames;
+        this->frame_delay = 60;
+    }
+    else{
+        this->frame_delay--;
+    }
+
     return this->anim[this->curframe];
 }
 
