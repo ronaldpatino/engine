@@ -9,6 +9,14 @@
 #include <string>
 #include <vector>
 
+#define DIR_UP			0
+#define DIR_LEFT		1
+#define DIR_RIGHT		2
+#define DIR_DOWN		3
+
+static int const FRAME_DELAY = 10;
+
+
 class Entity {
 
 public:
@@ -17,6 +25,8 @@ public:
     Entity(const char *imagen, int x, int y, const char *script, const char *name, int frames, int width, int height);
 
     BITMAP * getFrame();
+
+    void walk(int dir);
 
     char *imagen;
     BITMAP *bitmap;

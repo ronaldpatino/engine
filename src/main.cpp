@@ -3,7 +3,6 @@
 #include "Api.h"
 
 void ticker(){
-    cout << ticks << endl;
     ticks++;
 }
 END_OF_FUNCTION(ticker)
@@ -16,7 +15,22 @@ int main() {
 
     while (!game_end) {
 
-        handle_input();
+        while(ticks == 0){
+            rest(0);
+        }
+
+        while(ticks > 0)
+        {
+            int old_ticks = ticks;
+
+            handle_input();
+
+            ticks--;
+            if(old_ticks <= ticks)//logic is taking too long: abort and draw a frame
+                break;
+        }
+
+
         draw_screen();
 
     }
@@ -26,8 +40,6 @@ int main() {
     return 0;
 }
 END_OF_MAIN() // This must be called right after the closing bracket of your MAIN function.
-
-
 
 
 void init_engine(){
@@ -62,7 +74,11 @@ void shutdown_engine(){
 }
 
 void handle_input(){
-    if(key[KEY_ESC]) { game_end = true; }
+    if(key[KEY_ESC]   ) { game_end = true; }
+    if (key[KEY_UP]   ) {player->walk(DIR_UP);}
+    if (key[KEY_LEFT] ) { player->walk(DIR_LEFT); }
+    if (key[KEY_RIGHT]) { player->walk(DIR_RIGHT); }
+    if (key[KEY_DOWN] ) { player->walk(DIR_DOWN); }
 }
 
 void draw_screen(){
@@ -99,6 +115,19 @@ void init_objects(){
 
     }
 
+    state.Load("/home/ronald/ClionProjects/engine/scripts/player.lua");
+    state["init"]();
+
+    string bmp = state["Entity"]["img"];
+    int x = state["Entity"]["x"];
+    int y = state["Entity"]["y"];
+    int frames = state["Entity"]["frames"];
+    int width = state["Entity"]["width"];
+    int height = state["Entity"]["height"];
+
+    player = new Entity(bmp.c_str(), x, y, "/home/ronald/ClionProjects/engine/scripts/player.lua", "player",frames, width,height);
+
+    objects_list.push_front(player);
 }
 
 void init_script(){

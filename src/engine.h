@@ -22,6 +22,7 @@ void draw_screen();
 void init_objects();
 void init_script();
 
+Entity* player;
 const int updates_per_second = 60;
 BITMAP *buffer;
 bool game_end = false;
