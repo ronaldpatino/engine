@@ -1,3 +1,5 @@
+Allegro Lua Scripting
+
 A simple C++ sample of using Selene to bind Lua to c++ functions using allegro 4.
 
 Selene https://github.com/jeremyong/Selene
